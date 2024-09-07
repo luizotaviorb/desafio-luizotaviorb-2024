@@ -1,4 +1,5 @@
 class RecintosZoo {
+    
     constructor() {
         this.recintos = [
             { numero: 1, bioma: ['savana'], tamanho: 10, animais: [{ especie: 'MACACO', quantidade: 3 }] },
@@ -7,7 +8,6 @@ class RecintosZoo {
             { numero: 4, bioma: ['rio'], tamanho: 8, animais: [] },
             { numero: 5, bioma: ['savana'], tamanho: 9, animais: [{ especie: 'LEAO', quantidade: 1 }] }
         ];
-
         this.animais = {
             LEAO: { tamanho: 3, biomas: ['savana'], carnivoro: true },
             LEOPARDO: { tamanho: 2, biomas: ['savana'], carnivoro: true },
@@ -17,31 +17,29 @@ class RecintosZoo {
             HIPOPOTAMO: { tamanho: 4, biomas: ['savana', 'rio'], carnivoro: false }
         };
     }
-
+    
     analisaRecintos(animal, quantidade) {
 
         // Verifica se o animal é válido
         if (!this.animais[animal]) {
             return { erro: "Animal inválido", recintosViaveis: null };
         }
-
         // Verifica se a quantidade é válida
         if (quantidade <= 0) {
             return { erro: "Quantidade inválida", recintosViaveis: null };
         }
-
         const especie = this.animais[animal];
         const recintosViaveis = [];
-
+        
         for (const recinto of this.recintos) {
+            
             let espacoOcupado = recinto.animais.reduce((total, a) => total + this.animais[a.especie].tamanho * a.quantidade, 0);
             let espacoDisponivel = recinto.tamanho - espacoOcupado;
-
+            
             // Verifica bioma adequado
             if (!especie.biomas.some(bioma => recinto.bioma.includes(bioma))) {
                 continue; // O recinto não é compatível em bioma
             }
-
             // Verifica se o recinto é adequado para carnívoros
             if (especie.carnivoro && recinto.animais.length > 0) {
                 // Permite apenas a própria espécie
@@ -49,16 +47,15 @@ class RecintosZoo {
                     continue;
                 }
             }
-
             // Verifica espaço necessário para o número de animais
             let espacoNecessario = especie.tamanho * quantidade;
-
+            
             // Se já houver outra espécie diferente, adiciona 1 ao espaço necessário
             const especiesPresentes = recinto.animais.map(a => a.especie);
             if (recinto.animais.length > 0 && !especiesPresentes.includes(animal)) {
                 espacoNecessario += 1; // Aumenta o espaço necessário em 1 se já houver outra espécie diferente
             }
-
+            
             // Não pode separar lotes de animais
             if (espacoDisponivel < espacoNecessario) {
                 continue; // Não há espaço suficiente para todos os animais
@@ -87,7 +84,6 @@ class RecintosZoo {
 }
 
 export { RecintosZoo as RecintosZoo };
-
 
 // Exemplificando erro "Animal inválido"
 
